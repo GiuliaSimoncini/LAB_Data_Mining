@@ -21,18 +21,25 @@ cartella_laboratorio/
 Per eseguire il notebook in esame occorre: 
 - Python 3.x
 - `numpy`, `pandas`, `matplotlib`, `scikit-learn` (K-means, Calinski-Harabasz, LOF)
-- `torch` (opzionale in quanto servirebe per eseguire LSTM-VAE/DONUT con la vera architettura ricorrente; in assenza di `torch` viene usato un *fallback* numpy/SVD)
+- `torch` (opzionale, in quanto servirebe per eseguire LSTM-VAE/DONUT con la vera architettura ricorrente; in assenza di `torch` viene usato un *fallback* numpy/SVD)
 
 ## Dataset
 
-Il notebook utilizza due dataset pubblici, entrambi presenti nella cartella `data.zip`. È necessario che tali dataset si trovino nella cartella `data/`, descritta in precedenza, per la corretta esecuzione del notebook. I dataset utilizzati sono KPI e Yahoo e sono descritti nella tabella sottostante:
+Il notebook utilizza due dataset pubblici, entrambi presenti nella cartella `data.zip`. È necessario che tali dataset si trovino nella cartella `data/`, descritta in precedenza, per la corretta esecuzione del notebook. I dataset utilizzati sono KPI e Yahoo.
 
-| Dataset | Tipo | Entità | Punti totali | Anomalie |
+La tabella seguente riporta, per ciascun dataset, sia le statistiche del paper originale (Table III) sia quelle effettivamente misurate sui dati caricati nel notebook (Sezione EDA):
+
+
+| Dataset | Fonte | Entità | Punti totali | Anomalie |
 |---|---|---|---|---|
-| **KPI** (`./data/kpi/`, AIOps competition) | Reale | 29 | 5.922.913 | 134.114 (2,26%) |
-| **Yahoo** (`./data/yahoo/`, S5, Yahoo Labs) | Reale/Sintetico | 367 | 572.966 | 3.896 (0,68%) |
+| **KPI** (`./data/kpi/`, AIOps competition) | Paper (Table III) | 29 | 5.922.913 | 134.114 (2,26%) |
+| **KPI** (`./data/kpi/`, AIOps competition) | Notebook (dati reali caricati) | 29 | 3.004.066 | 79.554 (2,65%) |
+| **Yahoo** (`./data/yahoo/`, S5, Yahoo Labs) | Paper (Table III) | 367 | 572.966 | 3.896 (0,68%) |
+| **Yahoo** (`./data/yahoo/`, S5, Yahoo Labs) | Notebook (dati reali caricati) | 67 | 94.866 | 1.669 (1,76%) |
 
-Qualore i file reali non siano presenti nella cartella `data/`, il notebook genera automaticamente dati sintetici con struttura statistica equivalente, in modo da poter essere eseguibito end-to-end.
+Come si può notare, il numero di entità e punti effettivamente disponibili in `data.zip` è inferiore a quello del dataset originale del paper (in particolare per Yahoo, 67 entità contro le 367 del paper): questo è dovuto al sottoinsieme di file realmente incluso in questa repository. Le percentuali di anomalie risultano comunque dello stesso ordine di grandezza di quelle riportate nel paper.
+
+Qualora i file reali non siano presenti nella cartella `data/`, il notebook genera automaticamente dati sintetici con struttura statistica equivalente, in modo da poter essere eseguito end-to-end.
 
 ## Struttura del notebook
 
