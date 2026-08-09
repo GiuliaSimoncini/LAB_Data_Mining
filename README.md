@@ -18,17 +18,16 @@ cartella_laboratorio/
 
 ### Requisiti
 
-Per eseguire il notebook in esame occorre: 
+Per eseguire il notebook in esame occorre:
 - Python 3.x
 - `numpy`, `pandas`, `matplotlib`, `scikit-learn` (K-means, Calinski-Harabasz, LOF)
-- `torch` (opzionale, in quanto servirebe per eseguire LSTM-VAE/DONUT con la vera architettura ricorrente; in assenza di `torch` viene usato un *fallback* numpy/SVD)
+- `torch` (opzionale, in quanto servirebbe per eseguire LSTM-VAE/DONUT con la vera architettura ricorrente; in assenza di `torch` viene usato un *fallback* numpy/SVD)
 
 ## Dataset
 
 Il notebook utilizza due dataset pubblici, entrambi presenti nella cartella `data.zip`. È necessario che tali dataset si trovino nella cartella `data/`, descritta in precedenza, per la corretta esecuzione del notebook. I dataset utilizzati sono KPI e Yahoo.
 
 La tabella seguente riporta, per ciascun dataset, sia le statistiche del paper originale (Table III) sia quelle effettivamente misurate sui dati caricati nel notebook (Sezione EDA):
-
 
 | Dataset | Fonte | Entità | Punti totali | Anomalie |
 |---|---|---|---|---|
