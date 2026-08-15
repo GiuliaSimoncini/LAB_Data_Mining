@@ -62,7 +62,7 @@ Il notebook **non effettua chiamate reali** al modello `deepseek-r1:8b` via Olla
 
 ## Risultati principali
 
-La seguente tabella riporta il confronto dei risultati ottenuti dal notebook realizzato e dall'articolo di riferimento.
+La seguente tabella riporta il confronto dei risultati ottenuti dall'approccio ClusterLLM sia nel caso del notebook realizzato che da parte dell'articolo di riferimento.
 
 | Metodo | KPI F1 | KPI Precision | KPI Time(s) | Yahoo F1 | Yahoo Precision | Yahoo Time(s) |
 |---|---|---|---|---|---|---|
