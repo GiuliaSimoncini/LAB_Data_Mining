@@ -36,7 +36,7 @@ La tabella seguente riporta, per ciascun dataset, sia le statistiche del paper o
 | **Yahoo** (`./data/yahoo/`, S5, Yahoo Labs) | Paper (Table III) | 367 | 572.966 | 3.896 (0,68%) |
 | **Yahoo** (`./data/yahoo/`, S5, Yahoo Labs) | Notebook (dati reali caricati) | 67 | 94.866 | 1.669 (1,76%) |
 
-Come si può notare, il numero di entità e punti effettivamente disponibili in `data.zip` è inferiore a quello del dataset originale del paper (in particolare per Yahoo, 67 entità contro le 367 del paper): questo è dovuto al sottoinsieme di file realmente incluso in questa repository. Le percentuali di anomalie risultano comunque dello stesso ordine di grandezza di quelle riportate nel paper.
+Come si può notare, il numero di entità e punti effettivamente disponibili in `data.zip` è inferiore a quello del dataset originale del paper (in particolare per Yahoo, 67 entità contro le 367 del paper): questo è dovuto al sottoinsieme di file effettivamente incluso in questa repository. Le percentuali di anomalie risultano comunque dello stesso ordine di grandezza di quelle riportate nel paper.
 
 Qualora i file reali non siano presenti nella cartella `data/`, il notebook genera automaticamente dati sintetici con struttura statistica equivalente, in modo da poter essere eseguito end-to-end.
 
