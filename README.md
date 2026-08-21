@@ -66,7 +66,7 @@ La seguente tabella riporta il confronto dei risultati ottenuti dall'approccio C
 
 | Metodo | KPI F1 | KPI Precision | KPI Time(s) | Yahoo F1 | Yahoo Precision | Yahoo Time(s) |
 |---|---|---|---|---|---|---|
-| Notebook realizzato | 0,632 | 0,854 | 35,1 | 0,358 | 0,366 | 17,5 |
+| Notebook realizzato | 0,632 | 0,854 | 31,3 | 0,358 | 0,366 | 16,9 |
 | Paper di riferimento | 0,642 | 0,985 | 283 | 0,537 | 0,885 | 23 |
 
 Dai risultati ottenuti, si evince che Cluster-LLM risulta il metodo con la migliore precisione su entrambi i dataset e, insieme a SR-CNN, quello con i tempi di esecuzione più contenuti rispetto a LOF, LSTM-VAE e DONUT (tutti oltre i 290s su KPI).
