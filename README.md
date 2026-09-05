@@ -1,6 +1,6 @@
 # Cluster-LLM per Real-Time Time-Series Anomaly Detection
 
-Il notebook realizzato replica la pipeline sperimentale dell'articolo **Cluster-LLM: Adaptive Real-Time Time-Series Anomaly Detection Using LLMs** (Zhu et al., CSIS-IAC 2025), combinando *clustering* non supervisionato di serie temporali e inferenza di baseline adattive tramite logica ispirata al *Chain-of-Thought* (CoT) prompting, per il rilevamento di anomalie in tempo reale.
+Il notebook realizzato replica la pipeline sperimentale dell'articolo **Cluster-LLM: Adaptive Real-Time Time-Series Anomaly Detection Using LLMs** (Zhu et al., CSIS-IAC 2025), combinando *clustering* non supervisionato di serie temporali e inferenza di baseline adattive tramite logica ispirata al *Chain-of-Thought* (CoT) prompting, per il rilevamento di anomalie in tempo reale. Il notebook include inoltre un'appendice che sostituisce la logica deterministica del CoT con chiamate reali a un LLM locale eseguito tramite **Ollama**.
 
 **Autore**: *Giulia Simoncini*
 
@@ -18,14 +18,21 @@ cartella_laboratorio/
 
 ### Requisiti
 
-Per eseguire il notebook in esame occorre:
+Per eseguire il corpo principale del notebook in esame occorre:
 - Python 3.x
 - `numpy`, `pandas`, `matplotlib`, `scikit-learn` (K-means, Calinski-Harabasz, LOF)
 - `torch` (opzionale, in quanto servirebbe per eseguire LSTM-VAE/DONUT con la vera architettura ricorrente; in assenza di `torch` viene usato un *fallback* numpy/SVD)
 
+Per eseguire anche l'Appendice con chiamate reali al LLM occorre inoltre:
+- la libreria `requests` (per interrogare l'API REST di Ollama; se assente, l'appendice ricade automaticamente sulla logica deterministica)
+- [Ollama](https://ollama.com) installato e in esecuzione (`ollama serve`), raggiungibile su `http://localhost:11434`
+- il modello scaricato con `ollama pull deepseek-r1:8b`
+
+Se questi requisiti non sono soddisfatti, l'appendice resta comunque eseguibile end-to-end, ma ogni chiamata al LLM ricade automaticamente sulla stessa logica statistica deterministica usata nel corpo principale, con un avviso di fallback stampato a schermo.
+
 ## Dataset
 
-Il notebook utilizza due dataset pubblici, entrambi presenti nella cartella `data.zip`. È necessario che tali dataset si trovino nella cartella `data/`, descritta in precedenza, per la corretta esecuzione del notebook. I dataset utilizzati sono KPI e Yahoo.
+Il notebook utilizza due dataset pubblici, entrambi presenti nella cartella `data.zip`. È necessario che tali dataset si trovino nella cartella `data/`, descritta in precedenza, per la corretta esecuzione del notebook. I dataset utilizzati sono KPI e Yahoo, e sono impiegati sia nel corpo principale che nell'Appendice.
 
 La tabella seguente riporta, per ciascun dataset, sia le statistiche del paper originale (Table III) sia quelle effettivamente misurate sui dati caricati nel notebook (Sezione EDA):
 
@@ -56,20 +63,31 @@ Il notebook è suddiviso nelle seguenti sezioni:
 10. **Metodi di confronto**, che analizza i metodi LOF, LSTM-VAE, DONUT, SR-CNN (versioni semplificate);
 11. **Tabella e grafici riassuntivi**, ossia la replica della Table IV del paper.
 
+Segue infine un'**Appendice**, che ripropone i macro-passi analoghi a quelli sopra descritti, sostituendo il solo modulo di baseline (Sezione 6) con la sua controparte realmente inferita da un LLM locale (`deepseek-r1:8b` via Ollama):
+
+1. **EDA delle serie di esempio**, ossia le statistiche delle due sole serie (una per KPI, una per Yahoo) usate nel resto dell'appendice, a confronto con la media dell'intero dataset di appartenenza e con i valori presenti nel paper di riferimento;
+2. **Implementazione con Ollama**, che comprende il client REST verso Ollama, i tre prompt del CoT (z-score, fit Gaussiano orario, fusione), la pipeline con *fallback* automatico sulla logica deterministica, la visualizzazione delle baseline e del rilevamento sulle serie d'esempio, e l'esecuzione end-to-end (di default limitata alle due serie d'esempio per restare eseguibile in tempi ragionevoli; impostando `RUN_ON_FULL_DATASET = True` la pipeline via LLM viene invece eseguita su tutte le entità, replicando le condizioni della Table IV del paper);
+3. **Tabella e grafici riassuntivi**, che aggiungono la riga `Cluster-LLM (Ollama deepseek-r1:8b)` alla tabella comparativa della Sezione 11;
+4. **Confronto diretto** tra la variante CoT deterministica (Sezione 6) e quella con CoT realmente inferito dal LLM, a parità di preprocessing, clustering e algoritmo di detection.
+
 ## Nota Importante
 
-Il notebook **non effettua chiamate reali** al modello `deepseek-r1:8b` via Ollama (ossia il LLM usato nel paper originale per l'inferenza delle baseline). Al posto di tali chiamate, i 3 step del CoT sono implementati mediante una logica statistica deterministica equivalente, che riproduce la struttura del metodo ma che non garantisce valori identici alla Table IV del paper. L'andamento qualitativo complessivo (ovvero alta precisione, recall contenuta e bassa latenza) risulta comunque coerente con i risultati riportati dall'articolo di riferimento.
+Il **corpo principale del notebook** (Sezioni 1-11) **non effettua chiamate reali** al modello `deepseek-r1:8b` via Ollama (ossia il LLM usato nel paper originale per l'inferenza delle baseline). Al posto di tali chiamate, i 3 step del CoT sono implementati mediante una logica statistica deterministica equivalente, che riproduce la struttura del metodo ma che non garantisce valori identici alla Table IV del paper. L'andamento qualitativo complessivo (ovvero alta precisione, recall contenuta e bassa latenza) risulta comunque coerente con i risultati riportati dall'articolo di riferimento.
+
+L'**Appendice** effettua invece chiamate reali a `deepseek-r1:8b` tramite Ollama, se disponibile: ogni cluster richiede 3 chiamate al LLM (una per step del CoT). Su un modello da 8B eseguito localmente, replicare l'esecuzione su tutte le 29+67 entità dei due dataset (`RUN_ON_FULL_DATASET = True`) può richiedere da decine di minuti a diverse ore a seconda dell'hardware disponibile; per questo motivo, di default (`RUN_ON_FULL_DATASET = False`), la pipeline via LLM viene eseguita solo sulle due serie d'esempio già usate nel resto dell'appendice. In assenza di un'istanza Ollama attiva (o del modello scaricato), ogni chiamata ricade automaticamente sulla stessa logica deterministica del corpo principale, con un avviso di fallback stampato a schermo, garantendo comunque l'esecuzione end-to-end dell'intera appendice.
 
 ## Risultati Principali
 
-La seguente tabella riporta il confronto dei risultati ottenuti dall'approccio Cluster-LLM sia nel caso del notebook realizzato che da parte dell'articolo di riferimento.
+La seguente tabella riporta il confronto dei risultati ottenuti dall'approccio Cluster-LLM (variante deterministica, corpo principale del notebook) sia nel caso del notebook realizzato che da parte dell'articolo di riferimento.
 
 | Metodo | KPI F1 | KPI Precision | KPI Time(s) | Yahoo F1 | Yahoo Precision | Yahoo Time(s) |
 |---|---|---|---|---|---|---|
-| Notebook realizzato | 0,632 | 0,854 | 31,3 | 0,358 | 0,366 | 16,9 |
+| Notebook realizzato | 0,632 | 0,853 | 28,9 | 0,358 | 0,366 | 11,4 |
 | Paper di riferimento | 0,642 | 0,985 | 283 | 0,537 | 0,885 | 23 |
 
 Dai risultati ottenuti, si evince che Cluster-LLM risulta il metodo con la migliore precisione su entrambi i dataset e, insieme a SR-CNN, quello con i tempi di esecuzione più contenuti rispetto a LOF, LSTM-VAE e DONUT (tutti oltre i 230s su KPI).
+
+I risultati della variante con CoT realmente inferito dal LLM (Appendice) dipendono dalla disponibilità di un'istanza Ollama locale con il modello `deepseek-r1:8b` e, se eseguita solo sulle due serie d'esempio di default, non sono direttamente confrontabili con la Table IV del paper (calcolata sull'intero dataset); si veda l'Appendice per il confronto diretto con la variante deterministica.
 
 ## Bibliografia
 
